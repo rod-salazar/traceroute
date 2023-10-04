@@ -7,7 +7,6 @@
 #include <netinet/ip.h>
 #include <iostream>
 #include <arpa/inet.h>
-#include <netinet/ip.h>      // For struct ip (IPv4)
 #include <netinet/ip6.h>     // For struct ip6_hdr (IPv6)
 #include <netinet/ip_icmp.h>
 #include <netinet/icmp6.h>

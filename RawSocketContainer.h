@@ -7,8 +7,6 @@
 #ifndef TRACEROUTE_SOCKETCONTAINER_H
 #define TRACEROUTE_SOCKETCONTAINER_H
 
-#endif //TRACEROUTE_SOCKETCONTAINER_H
-
 struct RawSocketContainer {
     int m_fd = 0;
     ~RawSocketContainer();
@@ -56,3 +54,5 @@ namespace std {
         }
     };
 }
+
+#endif //TRACEROUTE_SOCKETCONTAINER_H
