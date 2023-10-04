@@ -8,7 +8,11 @@
 #include <string>
 #include "RawSocketContainer.h"
 
-std::string reverseDNSLookup(const IPAddressWrapper &addrWrapper);
-std::string resolveDomainToIP(const std::string &domain);
+namespace rodrigos::traceroute {
 
+    std::string reverseDNSLookup(const rodrigos::traceroute::IPAddressWrapper &addrWrapper);
+
+    std::string resolveDomainToIP(const std::string &domain);
+
+}
 #endif //TRACEROUTE_DOMAIN_H

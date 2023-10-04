@@ -7,44 +7,50 @@
 #ifndef TRACEROUTE_SOCKETCONTAINER_H
 #define TRACEROUTE_SOCKETCONTAINER_H
 
-struct RawSocketContainer {
-    int m_fd = 0;
-    ~RawSocketContainer();
+namespace rodrigos::traceroute {
 
-    std::optional<int> open(const std::string &destAddr, int maxHops);
-    bool send(const std::string& ipAddr);
-    std::unique_ptr<char[], std::function<void(char*)>> receive(int &bytesReceived);
-};
+    struct RawSocketContainer {
+        int m_fd = 0;
 
-enum class AddressType {
-    IPv4,
-    IPv6
-};
+        ~RawSocketContainer();
 
-union IPAddress {
-    struct sockaddr_in ipv4;
-    struct sockaddr_in6 ipv6;
-};
+        std::optional<int> open(const std::string &destAddr, int maxHops);
 
-struct IPAddressWrapper {
-    AddressType type;
-    IPAddress address;
+        bool send(const std::string &ipAddr);
 
-    bool operator==(const IPAddressWrapper& other) const {
-      if (type != other.type) return false;
-      if (type == AddressType::IPv4) {
-        return address.ipv4.sin_addr.s_addr == other.address.ipv4.sin_addr.s_addr;
-      } else {
-        return memcmp(&address.ipv6.sin6_addr, &other.address.ipv6.sin6_addr, sizeof(in6_addr)) == 0;
-      }
-    }
-};
+        std::unique_ptr<char[], std::function<void(char *)>> receive(int &bytesReceived);
+    };
+
+    enum class AddressType {
+        IPv4,
+        IPv6
+    };
+
+    union IPAddress {
+        struct sockaddr_in ipv4;
+        struct sockaddr_in6 ipv6;
+    };
+
+    struct IPAddressWrapper {
+        AddressType type;
+        IPAddress address;
+
+        bool operator==(const IPAddressWrapper &other) const {
+          if (type != other.type) return false;
+          if (type == AddressType::IPv4) {
+            return address.ipv4.sin_addr.s_addr == other.address.ipv4.sin_addr.s_addr;
+          } else {
+            return memcmp(&address.ipv6.sin6_addr, &other.address.ipv6.sin6_addr, sizeof(in6_addr)) == 0;
+          }
+        }
+    };
+}
 
 namespace std {
     template<>
-    struct hash<IPAddressWrapper> {
-        std::size_t operator()(const IPAddressWrapper& ip) const {
-          if (ip.type == AddressType::IPv4) {
+    struct hash<rodrigos::traceroute::IPAddressWrapper> {
+        std::size_t operator()(const rodrigos::traceroute::IPAddressWrapper& ip) const {
+          if (ip.type == rodrigos::traceroute::AddressType::IPv4) {
             return std::hash<uint32_t>()(ip.address.ipv4.sin_addr.s_addr);
           } else {
             // Hashing IPv6 address: for simplicity, we're hashing based on the first and last 64 bits

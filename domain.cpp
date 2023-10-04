@@ -7,7 +7,9 @@
 #include <iostream>
 #include "domain.h"
 
-std::string reverseDNSLookup(const IPAddressWrapper &addrWrapper) {
+using namespace rodrigos::traceroute;
+
+std::string rodrigos::traceroute::reverseDNSLookup(const IPAddressWrapper &addrWrapper) {
   char node[NI_MAXHOST + INET6_ADDRSTRLEN + 3]; // 3 for the ' ()', and INET6_ADDRSTRLEN to accommodate IPv6
   char ipStr[INET6_ADDRSTRLEN]; // Adjusted for IPv6
 
@@ -51,7 +53,7 @@ std::string reverseDNSLookup(const IPAddressWrapper &addrWrapper) {
   return node;
 }
 
-std::string resolveDomainToIP(const std::string &domain) {
+std::string rodrigos::traceroute::resolveDomainToIP(const std::string &domain) {
   struct addrinfo hints = {};
   struct addrinfo *result, *rp;
 

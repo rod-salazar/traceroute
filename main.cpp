@@ -9,6 +9,8 @@
 #include "RawSocketContainer.h"
 #include "domain.h"
 
+using namespace rodrigos::traceroute;
+
 /**
  * Requires root to create raw socket, so
  * sudo /Users/rod/code/traceroute/cmake-build-debug/traceroute

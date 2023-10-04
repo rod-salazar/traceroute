@@ -12,11 +12,11 @@
 #include <netinet/icmp6.h>
 #include "RawSocketContainer.h"
 
-RawSocketContainer::~RawSocketContainer() {
+rodrigos::traceroute::RawSocketContainer::~RawSocketContainer() {
   close(m_fd);
 }
 
-std::optional<int> RawSocketContainer::open(const std::string &destAddr, int maxHops) {
+std::optional<int> rodrigos::traceroute::RawSocketContainer::open(const std::string &destAddr, int maxHops) {
   int sockfd;
   struct sockaddr_storage storage;
   memset(&storage, 0, sizeof(storage));
@@ -57,7 +57,7 @@ std::optional<int> RawSocketContainer::open(const std::string &destAddr, int max
   return m_fd;
 }
 
-bool RawSocketContainer::send(const std::string &ipAddr) {
+bool rodrigos::traceroute::RawSocketContainer::send(const std::string &ipAddr) {
   // Determine if IP is IPv4 or IPv6
   struct in_addr ipv4_addr;
   struct in6_addr ipv6_addr;
@@ -119,7 +119,7 @@ bool RawSocketContainer::send(const std::string &ipAddr) {
   return true;
 }
 
-std::unique_ptr<char[], std::function<void(char*)>> RawSocketContainer::receive(int &bytesReceived) {
+std::unique_ptr<char[], std::function<void(char*)>> rodrigos::traceroute::RawSocketContainer::receive(int &bytesReceived) {
   // Buffer to store incoming packets, assumption is that 1024 is enough for ICMP.
   size_t buffer_size = 1024;
   auto recv_buffer = std::make_unique<char[]>(buffer_size);
