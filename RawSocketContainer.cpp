@@ -90,11 +90,9 @@ bool RawSocketContainer::send(const std::string &ipAddr) {
 
     // Send ICMPv4 Echo Request
     if (sendto(m_fd, &icmp_hdr, sizeof(icmp_hdr), 0, (struct sockaddr*)&dest_addr, sizeof(dest_addr)) <= 0) {
-      std::cerr << "Error sending packet: " << strerror(errno) << std::endl;
+      std::cerr << "Error sending ipv4 packet: " << strerror(errno) << std::endl;
       return false;
     }
-    std::cout << "Sent packet4 " << ipAddr << std::endl;
-
   } else if (inet_pton(AF_INET6, ipAddr.c_str(), &ipv6_addr) == 1) {
     // IPv6 destination address
     sockaddr_in6 dest_addr6;
@@ -111,11 +109,9 @@ bool RawSocketContainer::send(const std::string &ipAddr) {
 
     // Send ICMPv6 Echo Request
     if (sendto(m_fd, &icmp6_hdr, sizeof(icmp6_hdr), 0, (struct sockaddr*)&dest_addr6, sizeof(dest_addr6)) <= 0) {
-      std::cerr << "Error sending packet: " << strerror(errno) << std::endl;
+      std::cerr << "Error sending ipv6 packet: " << strerror(errno) << std::endl;
       return false;
     }
-    std::cout << "Sent packet6 " << ipAddr << std::endl;
-
   } else {
     std::cerr << "Invalid IP address format: " << ipAddr << std::endl;
     return false;
@@ -132,10 +128,7 @@ std::unique_ptr<char[], std::function<void(char*)>> RawSocketContainer::receive(
   struct sockaddr_storage sender_addr; // Use sockaddr_storage to be able to handle both IPv4 and IPv6
   socklen_t addrlen = sizeof(sender_addr);
 
-  std::cout << "icmp_n_hops4 " << m_fd  << std::endl;
-
   bytesReceived = recvfrom(m_fd, recv_buffer.get(), buffer_size, 0, (struct sockaddr*)&sender_addr, &addrlen);
-  std::cout << "icmp_n_hops5" << std::endl;
 
   if (bytesReceived < 0) {
     perror("recvfrom");

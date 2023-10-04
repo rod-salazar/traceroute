@@ -69,23 +69,23 @@ std::string resolveDomainToIP(const std::string &domain) {
     return "";
   }
 
-  // Return any result
+  // Prefer ipv4
+
+  char ipStr4[15] = {0};
+  char ipStr6[INET6_ADDRSTRLEN] = {0};
   for (rp = result; rp != nullptr; rp = rp->ai_next) {
-    char ipStr[INET6_ADDRSTRLEN];  // Big enough for both IPv4 and IPv6 addresses
 
     if (rp->ai_family == AF_INET) {
       struct sockaddr_in* ipv4 = reinterpret_cast<struct sockaddr_in*>(rp->ai_addr);
-      inet_ntop(AF_INET, &(ipv4->sin_addr), ipStr, sizeof(ipStr));
-      return ipStr;
+      inet_ntop(AF_INET, &(ipv4->sin_addr), ipStr4, sizeof(ipStr4));
     } else if (rp->ai_family == AF_INET6) {
       struct sockaddr_in6* ipv6 = reinterpret_cast<struct sockaddr_in6*>(rp->ai_addr);
-      inet_ntop(AF_INET6, &(ipv6->sin6_addr), ipStr, sizeof(ipStr));
-      return ipStr;
+      inet_ntop(AF_INET6, &(ipv6->sin6_addr), ipStr6, sizeof(ipStr6));
     }
   }
 
   freeaddrinfo(result);
-  return "";
+  return ipStr4[0] == 0 ? ipStr6 : ipStr4;
 }
 
 
